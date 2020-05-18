@@ -1,6 +1,27 @@
-import React, { useState } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
+import AlertContext from '../../context/alerts/alertContext';
+import AuthContext from '../../context/auth/authContext';
 
-const Register = () => {
+const Register = props => {
+
+    const alertContext = useContext(AlertContext);
+    const authContext = useContext(AuthContext);
+
+    const { setAlert } = alertContext;
+    const { register, error, clearErrors, isAuthenticated } = authContext;
+
+    useEffect(() => {
+
+        if(isAuthenticated) {
+            props.history.push('/');
+        }
+
+        if(error === 'User already exists') {
+            setAlert(error, 'danger');
+            clearErrors();
+        }
+        //eslint-disable-next-line
+    }, [error, isAuthenticated, props.history]);
 
     const [user, setUser] = useState({
         name: '',
@@ -17,7 +38,19 @@ const Register = () => {
 
     const submitFunction = e => {
         e.preventDefault();
-        console.log('Register Submit');
+
+        if(name === '' || email === '' || password === '') {
+            setAlert('Please fill in all fields', 'danger');
+        } else if(password !== password2) {
+            setAlert('Passwords do not match', 'danger');
+        } else {
+            register({
+                name,
+                email,
+                password
+            });
+        }
+
     }
 
     return (
@@ -28,19 +61,19 @@ const Register = () => {
             <form onSubmit={submitFunction}>
                 <div className="form-group">
                     <label htmlFor="name">Name</label>
-                    <input type="text" name="name" value={name} onChange={changeFunction} />
+                    <input type="text" name="name" value={name} onChange={changeFunction} required/>
                 </div>
                 <div className="form-group">
                     <label htmlFor="email">Email</label>
-                    <input type="email" name="email" value={email} onChange={changeFunction} />
+                    <input type="email" name="email" value={email} onChange={changeFunction} required />
                 </div>
                 <div className="form-group">
                     <label htmlFor="password">Password</label>
-                    <input type="password" name="password" value={password} onChange={changeFunction} />
+                    <input type="password" name="password" value={password} onChange={changeFunction} required minLength="6" />
                 </div>
                 <div className="form-group">
                     <label htmlFor="password2">Confirm Password</label>
-                    <input type="password" name="password2" value={password2} onChange={changeFunction} />
+                    <input type="password" name="password2" value={password2} onChange={changeFunction} required minLength="6" />
                 </div>
                 <input type="submit" value="Register" className="btn btn-block btn-primary"/>
             </form>
