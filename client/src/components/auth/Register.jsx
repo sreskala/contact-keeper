@@ -16,7 +16,8 @@ const Register = props => {
             props.history.push('/');
         }
 
-        if(error === 'User already exists') {
+        //User already exists
+        if(error === 'User already exists.') {
             setAlert(error, 'danger');
             clearErrors();
         }
@@ -37,12 +38,15 @@ const Register = props => {
     }
 
     const submitFunction = e => {
+        const reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
         e.preventDefault();
 
         if(name === '' || email === '' || password === '') {
             setAlert('Please fill in all fields', 'danger');
         } else if(password !== password2) {
             setAlert('Passwords do not match', 'danger');
+        } else if(reg.test(email) === false) {
+            setAlert('Please enter a valid email', 'danger');
         } else {
             register({
                 name,
