@@ -1,11 +1,14 @@
 import React, { useState, useContext, useEffect } from 'react';
 import ContactContext from '../../context/contact/contactContext';
+import AlertContext from '../../context/alerts/alertContext';
 
 const ContactForm = () => {
 
     const contactContext = useContext(ContactContext);
+    const alertContext = useContext(AlertContext);
 
     const { addContact, clearCurrent, updateContact, current } = contactContext;
+    const { setAlert } = alertContext;
 
     useEffect(() => {
         if(current !== null) {
@@ -35,10 +38,30 @@ const ContactForm = () => {
 
     const onFormSubmit = e => {
         e.preventDefault();
+
+        //reg const
+        const emailReg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+        const phoneReg = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
+
         if(current === null) {
-            addContact(contact);
+            //check email and phone validity
+            if (emailReg.test(email) === false) {
+                setAlert('Please enter a valid email', 'danger');
+            } else if (phoneReg.test(phone) === false) {
+                setAlert('Please enter phone in 000-000-0000 format', 'danger')
+            } else {
+                addContact(contact);
+            }
+            
         } else {
-            updateContact(contact);
+            if (emailReg.test(email) === false) {
+                setAlert('Please enter a valid email', 'danger');
+            } else if (phoneReg.test(phone) === false) {
+                setAlert('Please enter phone in 000-000-0000 format', 'danger')
+            } else {
+                updateContact(contact);
+            }
+            
         }
         setContact({
             name: '',
