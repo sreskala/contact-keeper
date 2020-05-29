@@ -439,4 +439,10 @@ table th {
     text-align: center;
     justify-content: center;
   }
+
+  /* Icon Credit */
+  .icon-source {
+    text-align: center;
+    display: block;
+  }
 }
