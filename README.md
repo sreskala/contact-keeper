@@ -1,6 +1,8 @@
 # contact-keeper
 Contact Keeper App built with React
 
+Link to the deployed application: [Contact Keeper](https://damp-woodland-27858.herokuapp.com/login)
+
 I followed a Udemy course while building this app in order to learn more advanced components of React. The back-end was built using
 Node and Express, coupled with MongoDB + Mongoose for database handling and utilizing Mongo Atlas to host the database.
 I was able to learn about user authentication and specific pages allowed access based on that by learning to use
